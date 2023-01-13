@@ -1,5 +1,7 @@
 # Substream Caller
 
+WIP: Use https://github.com/messari/substreams-python instead :)
+
 This python script will call substream modules from https://github.com/messari/substreams and store up the results.
 
 ## Setup

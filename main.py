@@ -8,6 +8,7 @@ import time
 import grpc
 import sys
 import base64
+import json
 
 from google.protobuf.json_format import MessageToDict
 
@@ -51,28 +52,30 @@ def main():
         fork_steps=[STEP_IRREVERSIBLE],
         modules=pkg.modules,
         output_modules=output_modules,
-        # initial_store_snapshot_for_modules=output_modules
+        initial_map_snapshot_for_modules=output_modules
     ))
 
     start_time = time.time()
     last_time = start_time
-
+    
     for response in stream:
         # progress message
         if response.progress and (time.time() - last_time) >= 5:
             print("time elapsed: %.2fs" % (time.time() - start_time))
             last_time = time.time()
         
-        snapshot = MessageToDict(response.snapshot_data)
+        # snapshot = MessageToDict(response.snapshot_data)
+        # print(snapshot)
+    
 
-        if snapshot and snapshot["moduleName"] == output_modules[0]:
-            snapshot_deltas = snapshot["deltas"]
-            if snapshot_deltas:
-                deltas = snapshot_deltas["deltas"]
-                for delta in deltas:
-                    key = delta["key"]
-                    value = base64.b64decode(delta["newValue"])
-                    output[key] = value
+        # if snapshot and snapshot["moduleName"] == output_modules[0]:
+        #     snapshot_deltas = snapshot["deltas"]
+        #     if snapshot_deltas:
+        #         deltas = snapshot_deltas["deltas"]
+        #         for delta in deltas:
+        #             key = delta["key"]
+        #             value = base64.b64decode(delta["newValue"])
+        #             output[key] = value
     
     print_output()
 
